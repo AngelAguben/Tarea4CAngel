@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class Animal {
 
     // Declararemos las variables y las iniciaremos
-    private LocalDate FechaNaci;
+    private LocalDate fechaNaci;
     // TIPO = gato, perro, lagarto, cobaya o periquito
     // ESTADO = comiendo, durmiendo, despierto/reposo o reposo
     private String nombre, tipo, estado;
@@ -23,19 +23,21 @@ public class Animal {
     private double peso;
     private static int contadorIns = 0;
 
+    // Constructor por defecto
     public Animal() {
         this.tipo = "gato";
-        this.FechaNaci = LocalDate.now();
+        this.fechaNaci = LocalDate.now();
         this.nombre = "Turrón";
         this.peso = 2200;
         this.estado = "durmiendo";
         contadorIns++;
     }
 
+    // Constructor parametrizado
     public Animal(LocalDate FechaNaci, String nombre, String tipo, String estado, double peso) {
         // No entiendo muy bien donde poner el try catch
         try {
-            this.FechaNaci = FechaNaci;
+            this.fechaNaci = FechaNaci;
             this.nombre = nombre;
             this.tipo = tipo;
             this.estado = estado;
@@ -57,6 +59,7 @@ public class Animal {
         } else {
             // Si no, se sumará al peso.
             this.peso += cantidadGramos;
+            this.estado = "comiendo";
         }
     }
 
@@ -77,43 +80,44 @@ public class Animal {
 
     // Método jugar()
     public void jugar(int cantidadMinutos) {
-        this.estado = "jugando";
+
+        // Para poner los números negativos a positivos
         if (cantidadMinutos < 0) {
             cantidadMinutos *= -1;
         }
-        // Si la cantidad de minutos es mayor o igual a 30...
-        if (cantidadMinutos >= 30 && cantidadMinutos <= 180) {
-            // Si el resto de 30 es 0, es decir que es 30 ...
-            if (cantidadMinutos % 30 == 0) {
-                do {
-                    // se añadirá un valor más a c
-                    cantidadMinutos -= 30;
-                    this.peso -= 20;
-                } while (cantidadMinutos >= 30);
-                this.peso -= 10;
-            } else if (cantidadMinutos % 30 != 0) {
-                do {
-                    cantidadMinutos -= 30;
-                } while (cantidadMinutos > 30);
-                this.peso -= 10;
-            }
-            // Si supera los 180 minutos
-        } else if (cantidadMinutos > 180) {
+        // Si supera los 180 minutos
+        if (cantidadMinutos > 180) {
             // Lanzará esta excepción
-            throw new IllegalArgumentException("IAE");
+            throw new IllegalArgumentException("No se puede jugar más de 180 min");
+        }
+
+        // Ponemos al animal jugando
+        this.estado = "jugando";
+        // Si los minutos son menor a 30... 
+        if (cantidadMinutos < 30) {
+            this.peso -= 10;
+
+            // Si los minutos es mayor a 181 ...
+        } else if (cantidadMinutos < 181) {
+            // Se restará al peso 20 por minutos entre 30
+            this.peso -= 20 * (cantidadMinutos / 30);
         }
     }
 
     @Override
     // Este es el método toString
     public String toString() {
-        return "Animal{" + "FechaNaci=" + FechaNaci + ", nombre=" + nombre + ", tipo=" + tipo + ", estado=" + estado + ", peso=" + peso + '}';
+        return "Animal{" + "FechaNaci=" + fechaNaci + ", nombre=" + nombre + ", tipo=" + tipo + ", estado=" + estado + ", peso=" + peso + '}';
     }
 
-    // Método clonar
-    public Animal clonar(Animal pet) {
-        Animal CoPet = new Animal(pet.FechaNaci, pet.nombre, pet.tipo, pet.estado, pet.peso);
-        return CoPet;
+    // Método clonar de clase, es decir, static
+    public static Animal clonar(Animal pet) {
+        if (pet == null) {
+            return new Animal();
+        } else {
+            Animal coPet = new Animal(pet.fechaNaci, pet.nombre, pet.tipo, pet.estado, pet.peso);
+            return coPet;
+        }
     }
 
     // ¿Devolverá el número de objetos? Esto tengo que preguntar
@@ -123,11 +127,11 @@ public class Animal {
 
     // GETTERS Y SETTERS
     public LocalDate getFechaNaci() {
-        return FechaNaci;
+        return fechaNaci;
     }
 
     public void setFechaNaci(LocalDate FechaNaci) {
-        this.FechaNaci = FechaNaci;
+        this.fechaNaci = FechaNaci;
     }
 
     public String getNombre() {

@@ -10,7 +10,7 @@ package daw.angel;
  * @author Ángel
  */
 public class Persona {
-    
+
     private String nombre;
     private int edad;
 
@@ -22,7 +22,7 @@ public class Persona {
 
     // Método llamar(Animal pet)
     public void llamar(Animal pet) {
-        pet.setEstado("despierto/reposo");
+        pet.despertar();
     }
 
     // Método alimentar(Animal pet, double cantidadGramos)
@@ -37,10 +37,8 @@ public class Persona {
             // Y si coges esta excepción 
         } catch (IllegalArgumentException IAE) {
             // cantidadMinutos será 180
-            cantidadMinutos = 180;
+            // Y se intenta otra vez
+            pet.jugar(180);
         }
-        // Y se inenta otra vez
-        pet.jugar(cantidadMinutos);
     }
-    
 }
